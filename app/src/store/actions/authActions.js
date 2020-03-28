@@ -109,7 +109,9 @@ export const pushAuthData = (userId, first, last, email) => {
       }
 
       url = "https://winhacks2020-88149.firebaseio.com/Users.json"
-      axios.put(url, data)
+      axios.put(url, data).then((response) => {
+        console.log(response)
+      });
       
 
 
