@@ -8,6 +8,25 @@ export const authStart = () => {
     };
 };
 
+export const userSave = (firstName, lastName, email, userId, lat, long) => {
+    return {
+        type: actionTypes.USER_SAVE_SUCCESS,
+        email: email,
+        fName: firstName,
+        lName: lastName,
+        userId: userId,
+        latitude: lat,
+        longitude: long
+    }
+}
+
+export const userSaveFailure = (error) => {
+    return {
+        type: actionTypes.USER_SAVE_FAILURE,
+        error: error
+    };
+};
+
 export const authSuccess = (token, userId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
@@ -40,7 +59,20 @@ export const checkAuthTimeout = (expirationTime) => {
     };
 };
 
-export const auth = (email, password, isSignup) => {
+const getLocation = () => {
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(saveCoords);
+    }
+    else{
+        //error    
+    }
+}
+function saveCoords(position){
+    localStorage.setItem('latitude', position.coords.latitude);
+    localStorage.setItem('longitude', position.coords.longitude);   
+}
+
+export const auth = (firstName, lastName, email, password, isSignup) => {
     return dispatch => {
         dispatch(authStart());
         const authData = {
@@ -53,12 +85,14 @@ export const auth = (email, password, isSignup) => {
         if (!isSignup) {
             url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBbBi4HK7MdjkQMwroh6RbdFixFYwg8POg';
         }
+        getLocation();
         axios.post(url, authData)
             .then(response => {
                 const expirationDate = new Date (new Date().getTime() + response.data.expiresIn * 1000);
                 localStorage.setItem('token', response.data.idToken);
                 localStorage.setItem('expirationDate', expirationDate);
                 localStorage.setItem('userId', response.data.localId);
+                dispatch(pushAuthData(response.data.localId, firstName, lastName, email, localStorage.getItem('latitude'), localStorage.getItem('longitude')));
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
                 dispatch(checkAuthTimeout(response.data.expiresIn));
             })
@@ -94,22 +128,26 @@ export const authCheckState = () => {
     };
 };
 
-export const pushAuthData = (userId, first, last, email) => {
-    let data = {
-        email: {
-          "uid": userId,
-          "first": first,
-          "last": last,
-          "email": email
-        }
-      }
 
-      let url = "https://winhacks2020-88149.firebaseio.com/Users.json"
-      axios.post(url, data).then((response) => {
-        console.log(response)
-      });
-      
-
-
+export const pushAuthData = (userId, first, last, email, lat, long) => {
+    console.log(lat, long);
+    return dispatch => {
+        let data = {
+              "uid": userId,
+              "first": first,
+              "last": last,
+              "email": email,
+              "latitude": lat,
+              "longitude": long
+          }
+    
+          let url = "https://winhacks2020-88149.firebaseio.com/Users.json"
+          axios.post(url, data).then((response) => {
+            console.log(response);
+            dispatch(userSave(userId, first, last, email, lat, long));
+          }).catch(err => {
+              dispatch(userSaveFailure(err.response.data.error));
+          })
+    }
 
 }

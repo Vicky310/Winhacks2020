@@ -90,7 +90,8 @@ class Auth extends Component {
 
     submitHandler = ( event ) => {
         event.preventDefault();
-        this.props.onAuth( this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup );
+        this.props.onAuth( this.state.controls.firstName.value, this.state.controls.lastName.value, this.state.controls.email.value,
+            this.state.controls.password.value, this.state.isSignup );
     }
 
     switchAuthModeHandler = () => {
@@ -167,7 +168,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: ( email, password, isSignup ) => dispatch( actions.auth( email, password, isSignup ) ),
+        onAuth: ( firstName, lastName, email, password, isSignup ) => dispatch( actions.auth( firstName, lastName, email, password, isSignup ) ),
         onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/profile'))
     };
 };
