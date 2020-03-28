@@ -59,18 +59,25 @@ export const checkAuthTimeout = (expirationTime) => {
     };
 };
 
-const getLocation = () => {
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(saveCoords);
-    }
-    else{
-        //error    
-    }
+ const getLocation = (callback) => {
+    var promise = new Promise(function(resolve, reject) {
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    resolve("getLocation successfull")
+                    localStorage.setItem('latitude', position.coords.latitude);
+                    localStorage.setItem('longitude', position.coords.longitude);   
+                }
+            );
+        }
+        else{
+            //error  
+            reject("error in getLocation")  
+        }
+    });
+    return promise
 }
-function saveCoords(position){
-    localStorage.setItem('latitude', position.coords.latitude);
-    localStorage.setItem('longitude', position.coords.longitude);   
-}
+
 
 export const auth = (firstName, lastName, email, password, isSignup) => {
     return dispatch => {
@@ -85,8 +92,11 @@ export const auth = (firstName, lastName, email, password, isSignup) => {
         if (!isSignup) {
             url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBbBi4HK7MdjkQMwroh6RbdFixFYwg8POg';
         }
-        getLocation();
-        axios.post(url, authData)
+        var getLoc = getLocation();
+        getLoc
+        .then(loc => {
+            console.log(loc);
+            axios.post(url, authData)
             .then(response => {
                 const expirationDate = new Date (new Date().getTime() + response.data.expiresIn * 1000);
                 localStorage.setItem('token', response.data.idToken);
@@ -102,6 +112,12 @@ export const auth = (firstName, lastName, email, password, isSignup) => {
             .catch(err => {
                 dispatch(authFail(err.response.data.error));
             });
+        })
+        .catch(error => {
+            console.log(error);
+        })
+      
+        
     };
 };
 
