@@ -160,8 +160,8 @@ export const pushAuthData = (userId, first, last, email, lat, long) => {
               "longitude": long
           }
     
-          let url = "https://winhacks2020-88149.firebaseio.com/Users.json"
-          axios.post(url, data).then((response) => {
+          let url = "https://winhacks2020-88149.firebaseio.com/Users/" + userId + ".json"
+          axios.put(url, data).then((response) => {
             console.log(response);
             dispatch(userSave(userId, first, last, email, lat, long));
           }).catch(err => {
