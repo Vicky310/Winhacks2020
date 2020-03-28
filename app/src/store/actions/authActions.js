@@ -12,8 +12,8 @@ export const userSave = (firstName, lastName, email, userId, lat, long) => {
     return {
         type: actionTypes.USER_SAVE_SUCCESS,
         email: email,
-        fName: firstName,
-        lName: lastName,
+        firstName: firstName,
+        lastName: lastName,
         userId: userId,
         latitude: lat,
         longitude: long

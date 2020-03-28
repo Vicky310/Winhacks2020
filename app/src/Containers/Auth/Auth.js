@@ -6,6 +6,7 @@ import classes from './Auth.module.css';
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity } from '../../shared/utility';
 import { Redirect } from 'react-router-dom';
+import { PageHeader } from 'antd';
 
 class Auth extends Component {
     state = {
@@ -77,44 +78,44 @@ class Auth extends Component {
 
 
 
-    inputChangedHandler = ( event, controlName ) => {
+    inputChangedHandler = (event, controlName) => {
         const updatedControls = updateObject(this.state.controls, {
             [controlName]: updateObject(this.state.controls[controlName], {
                 value: event.target.value,
-                valid: checkValidity( event.target.value, this.state.controls[controlName].validation ),
+                valid: checkValidity(event.target.value, this.state.controls[controlName].validation),
                 touched: true
             })
         });
-        this.setState( { controls: updatedControls } );
+        this.setState({ controls: updatedControls });
     }
 
-    submitHandler = ( event ) => {
+    submitHandler = (event) => {
         event.preventDefault();
-        this.props.onAuth( this.state.controls.firstName.value, this.state.controls.lastName.value, this.state.controls.email.value,
-            this.state.controls.password.value, this.state.isSignup );
+        this.props.onAuth(this.state.controls.firstName.value, this.state.controls.lastName.value, this.state.controls.email.value,
+            this.state.controls.password.value, this.state.isSignup);
     }
 
     switchAuthModeHandler = () => {
         this.setState(prevState => {
-            return {isSignup: !prevState.isSignup};
+            return { isSignup: !prevState.isSignup };
         });
     }
 
-    render () {
+    render() {
         const formElementsArray = [];
-        for ( let key in this.state.controls ) {
-            formElementsArray.push( {
+        for (let key in this.state.controls) {
+            formElementsArray.push({
                 id: key,
                 config: this.state.controls[key]
-            } );
+            });
         }
 
-        if(!this.state.isSignup) {
+        if (!this.state.isSignup) {
             formElementsArray.splice(0, 2);
         }
 
 
-        let form = formElementsArray.map( formElement => (
+        let form = formElementsArray.map(formElement => (
             <Input
                 key={formElement.id}
                 elementType={formElement.config.elementType}
@@ -123,8 +124,8 @@ class Auth extends Component {
                 invalid={!formElement.config.valid}
                 shouldValidate={formElement.config.validation}
                 touched={formElement.config.touched}
-                changed={( event ) => this.inputChangedHandler( event, formElement.id )} />
-        ) );
+                changed={(event) => this.inputChangedHandler(event, formElement.id)} />
+        ));
 
         let errorMessage = null;
 
@@ -133,23 +134,28 @@ class Auth extends Component {
                 <p>{this.props.error.message}</p>
             );
         }
-        
+
         let authRedirect = null;
-        
+
         if (this.props.isAuthenticated) {
             console.log('Within render', this.props.authRedirectPath);
-            authRedirect = <Redirect to={'/profile'}/>
+            authRedirect = <Redirect to={'/profile'} />
         }
 
         return (
             <div className={classes.Auth}>
+                <PageHeader
+                    className="pageHeader"
+                    title="WinHacks2020"
+                    subTitle="Sign up or Log in"
+                />
                 {authRedirect}
                 {errorMessage}
                 <form onSubmit={this.submitHandler}>
                     {form}
                     <Button btnType="Success">SUBMIT</Button>
                 </form>
-                <Button 
+                <Button
                     clicked={this.switchAuthModeHandler}
                     btnType="Danger">SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}</Button>
             </div>
@@ -168,9 +174,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: ( firstName, lastName, email, password, isSignup ) => dispatch( actions.auth( firstName, lastName, email, password, isSignup ) ),
+        onAuth: (firstName, lastName, email, password, isSignup) => dispatch(actions.auth(firstName, lastName, email, password, isSignup)),
         onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/profile'))
     };
 };
 
-export default connect( mapStateToProps, mapDispatchToProps )( Auth );
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

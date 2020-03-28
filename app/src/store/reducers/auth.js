@@ -40,8 +40,8 @@ const setAuthRedirectPath = (state, action) => {
 const saveUserData = (state, action) => {
     return updateObject(state, {
         email: action.email,
-        firstName: action.fName,
-        lastName: action.lName,
+        firstName: action.firstName,
+        lastName: action.lastName,
         userId: action.userId,
         latitude: action.latitude,
         longitude: action.longitude
