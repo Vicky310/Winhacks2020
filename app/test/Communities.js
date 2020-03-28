@@ -66,25 +66,12 @@ function setup() {
   for(let i = 0; i < points.length; i++){
     ellipse(points[i].x, points[i].y, 4, 4);
   }
-  qtree.show();
   
   findComm(qtree);
   
-  console.log(communities); 
-  noStroke();
   commIcon.resize(20, 15);
   for(let i = 0; i < communities.length; i++){
-    let comm = communities[i];
-    fill(comm.color);
-    for(let j = 0; j < comm.users.length; j++){
-      ellipse(comm.users[j].x, comm.users[j].y, 4, 4);
-    }
-  }
-  
-  stroke(0, 0, 0);
-  strokeWeight(2);
-  for(let i = 0; i < communities.length; i++){
-    //image(commIcon, communities[i].point.x, communities[i].point.y);
+    image(commIcon, communities[i].point.x, communities[i].point.y);
   }
   
   
