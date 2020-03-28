@@ -14,7 +14,7 @@ const NavBar = (props) => {
         defaultSelectedKeys={['2']}
       >
         <Menu.Item key="1"><Link to="/posts">Communities</Link></Menu.Item>
-        <Menu.Item key="2">Profile</Menu.Item>
+        <Menu.Item key="2"><Link to="/profile">Profile</Link></Menu.Item>
         <Menu.Item key="3"><Link to="/logout">Logout</Link></Menu.Item>
       </Menu>
     </Header>
