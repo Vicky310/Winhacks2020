@@ -54,6 +54,26 @@ const userSaveFail = (state, action) => {
     });
 }
 
+const userFetchSuccess = (state, action) => {
+    console.log(action);
+    return updateObject(state, {
+        email: action.user.email,
+        firstName: action.user.first,
+        lastName: action.user.last,
+        userId: action.user.uid,
+        latitude: action.user.latitude,
+        longitude: action.user.longitude
+    })
+}
+
+
+const userFetchFail = (state, action) => {
+    return updateObject(state, {
+        error: action.error
+    });
+}
+
+
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) {
         case actionTypes.AUTH_START: return authStart(state, action);
@@ -63,6 +83,8 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.SET_AUTH_REDIRECT_PATH: return setAuthRedirectPath(state, action);
         case actionTypes.USER_SAVE_SUCCESS: return saveUserData(state, action);
         case actionTypes.USER_SAVE_FAILURE: return userSaveFail(state, action);
+        case actionTypes.FETCH_USER_SUCCESS: return userFetchSuccess(state,action);
+        case actionTypes.FETCH_USER_FAIL: return userFetchFail(state,action);
         default:
             return state;
     }

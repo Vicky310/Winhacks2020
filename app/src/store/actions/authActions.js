@@ -92,9 +92,12 @@ export const auth = (firstName, lastName, email, password, isSignup) => {
                 localStorage.setItem('token', response.data.idToken);
                 localStorage.setItem('expirationDate', expirationDate);
                 localStorage.setItem('userId', response.data.localId);
-                dispatch(pushAuthData(response.data.localId, firstName, lastName, email, localStorage.getItem('latitude'), localStorage.getItem('longitude')));
+                if(isSignup) {
+                    dispatch(pushAuthData(response.data.localId, firstName, lastName, email, localStorage.getItem('latitude'), localStorage.getItem('longitude')));
+                }
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
                 dispatch(checkAuthTimeout(response.data.expiresIn));
+                dispatch(fetchUser(response.data.idToken,response.data.localId));
             })
             .catch(err => {
                 dispatch(authFail(err.response.data.error));
@@ -150,4 +153,40 @@ export const pushAuthData = (userId, first, last, email, lat, long) => {
           })
     }
 
+}
+
+export const fetchUserSuccess = (user) => {
+    return {
+        type: actionTypes.FETCH_USER_SUCCESS,
+        user: user
+    }
+};
+
+export const fetchUserFail = (error) => {
+    return {
+        type: actionTypes.FETCH_USER_FAIL,
+        error: error
+    }
+};
+
+export const fetchUser = (token, userId) => {
+    return dispatch => { 
+        
+        const queryParams = '?auth=' + token + '&orderBy="uid"&equalTo="' + userId + '"';
+        axios.get('https://winhacks2020-88149.firebaseio.com/Users.json' + queryParams)
+        .then(res => {
+            const fetchedUsers = [];
+            for (let key in res.data) {
+                fetchedUsers.push({
+                    ...res.data[key],
+                    id: key
+                });
+            }
+            console.log(fetchedUsers, userId);
+            dispatch(fetchUserSuccess(fetchedUsers[0]));
+        })
+        .catch(err => {
+            dispatch(fetchUserFail(err));
+        })
+    }
 }
