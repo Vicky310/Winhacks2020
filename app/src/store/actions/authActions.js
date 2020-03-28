@@ -49,9 +49,9 @@ export const auth = (email, password, isSignup) => {
             returnSecureToken: true
         };
         // Todo: Firebase API key required
-        let url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=*FIREBASE API KEY REQUIRED*';
+        let url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyBbBi4HK7MdjkQMwroh6RbdFixFYwg8POg';
         if (!isSignup) {
-            url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=*FIREBASE API KEY REQUIRED*';
+            url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBbBi4HK7MdjkQMwroh6RbdFixFYwg8POg';
         }
         axios.post(url, authData)
             .then(response => {

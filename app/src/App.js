@@ -2,7 +2,6 @@ import React from 'react';
 
 import './App.css';
 import './Components/NavBar/NavBar';
-import { Button } from 'antd';
 import NavBar from './Components/NavBar/NavBar';
 import Signup from './Containers/Signup/Signup';
 

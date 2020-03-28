@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { connect } from 'react-redux';
+import * as actions from '../../store/actions/index';
 
 class Signup extends Component{
     render() {
@@ -25,7 +27,7 @@ class Signup extends Component{
                 })}
                 onSubmit={fields => {
                     console.log(fields)
-                    alert('SUCCESS!! :-)\n\n' + JSON.stringify(fields))
+                    this.props.onAuth( fields.email, fields.password, true );
                 }}
                 render={({ errors, status, touched }) => (
                     <Form>
@@ -56,4 +58,10 @@ class Signup extends Component{
     }
 }
 
-export default Signup;
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: ( email, password, isSignup ) => dispatch( actions.auth( email, password, isSignup ) )
+    };
+};
+
+export default connect(null, mapDispatchToProps)(Signup);
