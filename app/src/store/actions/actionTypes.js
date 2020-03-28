@@ -10,3 +10,6 @@ export const USER_SAVE_FAILURE = 'USER_SAVE_FAILURE';
 
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 export const FETCH_USER_FAIL = 'FETCH_USER_FAIL';
+
+export const ADD_POST = 'ADD_POST';
+export const REMOVE_POST = 'REMOVE_POST';
