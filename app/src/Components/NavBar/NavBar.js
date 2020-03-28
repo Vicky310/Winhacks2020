@@ -1,9 +1,9 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu } from 'antd';
 
 
 const NavBar = (props) => {
-    const { Header, Content, Footer } = Layout;
+    const { Header, Footer } = Layout;
     return (
         <Layout className="layout">
     <Header>
