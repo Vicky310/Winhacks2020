@@ -3,7 +3,7 @@ import { Layout, Menu, Breadcrumb } from 'antd';
 
 
 const NavBar = (props) => {
-    const { Header, Content, Footer } = Layout;
+    const { Header } = Layout;
     return (
         <Layout className="layout">
     <Header>
@@ -19,7 +19,6 @@ const NavBar = (props) => {
       </Menu>
     </Header>
     
-    <Footer style={{ textAlign: 'center' }}>WinHacks 2020</Footer>
   </Layout>
     );
 }
