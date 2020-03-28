@@ -93,3 +93,17 @@ export const authCheckState = () => {
         }
     };
 };
+
+export const pushAuthData = () => {
+    const userId = localStorage.getItem('userId');
+    const first = localStorage.getItem('firstName');
+    const last = localStorage.getItem('lastName');
+    const email = localStorage.getItem('email');
+    let data = {
+        uid: userId,
+        first: first,
+        last: last,
+        email: email,
+      };
+      db.collection('data').add(data);
+}
