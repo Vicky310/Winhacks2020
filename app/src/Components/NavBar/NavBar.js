@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-
+import Auth from '../../Containers/Auth/Auth';
+import { Link } from 'react-router-dom';
 
 const NavBar = (props) => {
     const { Header } = Layout;

@@ -105,5 +105,5 @@ export const pushAuthData = () => {
         last: last,
         email: email,
       };
-      db.collection('data').add(data);
+    //   db.collection('data').add(data);
 }

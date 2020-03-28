@@ -5,6 +5,7 @@ import Button from '../../Components/UI/Button/Button';
 import classes from './Auth.module.css';
 import * as actions from '../../store/actions/index';
 import { updateObject, checkValidity } from '../../shared/utility';
+import { Redirect } from 'react-router-dom';
 
 class Auth extends Component {
     state = {
@@ -67,6 +68,13 @@ class Auth extends Component {
         isSignup: true
     }
 
+    componentDidMount() {
+        console.log(this.props.authRedirectPath);
+        if (this.props.authRedirectPath !== '/') {
+            this.props.onSetAuthRedirectPath();
+        }
+    }
+
 
 
     inputChangedHandler = ( event, controlName ) => {
@@ -104,6 +112,7 @@ class Auth extends Component {
             formElementsArray.splice(0, 2);
         }
 
+
         let form = formElementsArray.map( formElement => (
             <Input
                 key={formElement.id}
@@ -123,8 +132,13 @@ class Auth extends Component {
                 <p>{this.props.error.message}</p>
             );
         }
-
+        
         let authRedirect = null;
+        
+        if (this.props.isAuthenticated) {
+            console.log('Within render', this.props.authRedirectPath);
+            authRedirect = <Redirect to={'/profile'}/>
+        }
 
         return (
             <div className={classes.Auth}>
@@ -145,13 +159,16 @@ class Auth extends Component {
 const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
-        error: state.auth.error
+        error: state.auth.error,
+        isAuthenticated: state.auth.token !== null,
+        authRedirectPath: state.auth.authRedirectPath
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: ( email, password, isSignup ) => dispatch( actions.auth( email, password, isSignup ) )
+        onAuth: ( email, password, isSignup ) => dispatch( actions.auth( email, password, isSignup ) ),
+        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/profile'))
     };
 };
 
