@@ -30,6 +30,9 @@ export default function setup() {
   // setup up default community for users who aren't in a community
   randomComm = new Community();
   randomComm.setID("default");
+  users = [];
+  communities = [];
+  dataList = [];
   
   let boundary = new Boundary(512, 256, 512, 256);
   qtree = new QuadTree(boundary, minCommSize);
