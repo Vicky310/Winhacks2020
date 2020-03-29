@@ -93,6 +93,11 @@ export default function setup() {
               let x = mercX(lon) - cx + 512;
               let y = mercY(lat) - cy + 256;
 
+              // if post was made within 20 units from community
+              if(Math.pow((x - comm.point.x), 2) + Math.pow((y - comm.point.y), 2) <= 20){
+                
+              }
+
               arrayPosts[i].latitude
               data[i] = arrayPosts[i]
             }
