@@ -7,7 +7,7 @@ import Auth from './Containers/Auth/Auth';
 import Profile from './Containers/Profile/Profile';
 import { connect } from 'react-redux';
 import Logout from './Containers/Auth/Logout/Logout';
-import Posts from './Containers/Communities/Posts/Posts';
+import Communities from './Containers/Communities/Communities';
 
 class App extends Component {
   render() {
@@ -23,7 +23,7 @@ class App extends Component {
         <Switch>
         <Route path="/profile" exact component={Profile} />
         <Route path="/logout" exact component={Logout} />
-        <Route path="/posts" exact component={Posts} />
+        <Route path="/communities" exact component={Communities} />
         <Route path="/" exact component={Auth} />
         <Redirect to="/" />
       </Switch>
