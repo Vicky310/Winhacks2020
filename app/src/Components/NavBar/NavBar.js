@@ -11,11 +11,12 @@ const NavBar = (props) => {
       <Menu
         theme="dark"
         mode="horizontal"
-        defaultSelectedKeys={['2']}
+        defaultSelectedKeys={['3']}
       >
-        <Menu.Item key="1"><Link to="/communities">Communities</Link></Menu.Item>
-        <Menu.Item key="2"><Link to="/profile">Profile</Link></Menu.Item>
-        <Menu.Item key="3"><Link to="/logout">Logout</Link></Menu.Item>
+        <Menu.Item key="1"><Link to="/listcommunities">List Communities</Link></Menu.Item>
+        <Menu.Item key="2"><Link to="/communities">Communities</Link></Menu.Item>
+        <Menu.Item key="3"><Link to="/profile">Profile</Link></Menu.Item>
+        <Menu.Item key="4"><Link to="/logout">Logout</Link></Menu.Item>
       </Menu>
     </Header>
     

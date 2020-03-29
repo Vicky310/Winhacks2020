@@ -50,6 +50,11 @@ class Communities extends Component {
         this.setState({ title: event.target.value, disabled: !(event.target.value && this.state.content) });
     }
 
+    handleFetch = () => {
+        console.log('Fetching COmmunities');
+        this.props.fetchCommunities();
+    }
+
     render() {
         const { TextArea } = Input;
         return (
@@ -58,7 +63,7 @@ class Communities extends Component {
                     <Button type="primary" onClick={this.showModal}>
                         Add a new post
                     </Button>
-                    <Button type="secondary" onClick={this.showModal}>
+                    <Button type="secondary" onClick={this.handleFetch}>
                         Start Your Journey To A New Community
                     </Button>
                     <Modal
@@ -117,7 +122,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onPost: (post, time, lat, long, uid, communityId, length) => dispatch(actions.savePost(post, time, lat, long, uid, communityId, length))
+        onPost: (post, time, lat, long, uid, communityId, length) => dispatch(actions.savePost(post, time, lat, long, uid, communityId, length)),
+        fetchCommunities: () => dispatch(actions.fetchRandomCommunities())
     };
 };
 

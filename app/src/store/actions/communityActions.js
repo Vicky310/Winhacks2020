@@ -38,6 +38,13 @@ export const savePostFail = (error) => {
     }
 }
 
+export const communitylistSuccess = (data) => {
+    return {
+        type: actionTypes.COMMUNITY_LIST_SUCCESS,
+        communityList: data
+    }
+}
+
 export const savePost = (post, time, lat, long, uid, communityId, len) => {
     console.log(lat, long);
     return dispatch => {
@@ -78,5 +85,34 @@ export const fetchCommunity = (communityId) => {
             console.log(err);
             // dispatch(fetchCommunityFail(err));
         })
+    }
+}
+
+
+export const fetchRandomCommunities = () => {
+    return dispatch => {
+        const array = [];
+        let choosen = [];
+        axios.get("https://winhacks2020-88149.firebaseio.com/community.json")
+        .then(res => {
+            for (let key in res.data) {
+              array.push(key);
+            }
+      
+          if(array.length <= 6) {
+            choosen = array;
+          } else {
+            choosen = [];
+            for(let i = 0; i < 6; i++){
+                let num = Math.floor(Math.random() * array.length); // generate random num 0 - (array.length-1)
+                choosen[i] = array[num];
+                array.splice(num, 1); // remove index num
+            }
+          }
+          console.log("Choosen", choosen);
+          dispatch(communitylistSuccess(choosen));
+          }).catch(err => {
+              console.log(err);
+          });
     }
 }

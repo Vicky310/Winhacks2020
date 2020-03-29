@@ -3,7 +3,8 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     posts: [],
     communities: [],
-    communityLength: 0
+    communityLength: 0,
+    communityList: []
 };
 
 const reducer = ( state = initialState, action ) => {
@@ -37,6 +38,11 @@ const reducer = ( state = initialState, action ) => {
                 ...state,
                 communities: state.communities.concat(action.data),
                 communityLength: state.communityLength+1
+            }
+        case actionTypes.COMMUNITY_LIST_SUCCESS:
+            return {
+                ...state,
+                communityList: action.communityList
             }
         default:
             return state;

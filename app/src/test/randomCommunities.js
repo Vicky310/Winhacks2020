@@ -6,7 +6,7 @@ export default function getCommunities(){
     axios.get("https://winhacks2020-88149.firebaseio.com/community.json")
   .then(res => {
       for (let key in res.data) {
-        array.push(keY);
+        array.push(key);
       }
 
     if(array.length <= 6) return array;

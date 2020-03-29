@@ -7,5 +7,6 @@ export {
 } from './authActions';
 
 export {
-    savePost
+    savePost,
+    fetchRandomCommunities
 } from './communityActions';

@@ -8,6 +8,7 @@ import Profile from './Containers/Profile/Profile';
 import { connect } from 'react-redux';
 import Logout from './Containers/Auth/Logout/Logout';
 import Communities from './Containers/Communities/Communities';
+import ListCommunities from './Containers/Communities/ListCommunities';
 
 class App extends Component {
   render() {
@@ -24,6 +25,7 @@ class App extends Component {
         <Route path="/profile" exact component={Profile} />
         <Route path="/logout" exact component={Logout} />
         <Route path="/communities" exact component={Communities} />
+        <Route path="/listcommunities" exact component={ListCommunities} />
         <Route path="/" exact component={Auth} />
         <Redirect to="/" />
       </Switch>
