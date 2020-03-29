@@ -105,7 +105,7 @@ export const auth = (firstName, lastName, email, password, isSignup) => {
                 localStorage.setItem('userId', response.data.localId);
                 if(isSignup) {
                     dispatch(pushAuthData(response.data.localId, firstName, lastName, email, localStorage.getItem('latitude'), localStorage.getItem('longitude')));
-                    setup();
+                    
                 }
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
                 dispatch(checkAuthTimeout(response.data.expiresIn));
@@ -169,6 +169,7 @@ export const pushAuthData = (userId, first, last, email, lat, long) => {
           let url = "https://winhacks2020-88149.firebaseio.com/Users/" + userId + ".json"
           axios.put(url, data).then((response) => {
             console.log(response);
+            setup();
       
             dispatch(userSave(first, last, email, userId, lat, long));
           }).catch(err => {

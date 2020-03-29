@@ -67,12 +67,16 @@ export default function setup() {
     findComm(qtree);
 
     users.forEach(usr =>{
+      console.log(usr.community.id)
       let data = {
-        community: usr.community.id
+        "community": usr.community.id
       }
+      console.log("data:  " + data.community)
+
       let url = "https://winhacks2020-88149.firebaseio.com/Users/" + usr.id + ".json"
       axios.patch(url, data).then((response) => {
-        console.log(response);
+        console.log("The user was assigned a community");
+
 
       }).catch(err => {
           console.log(err)
@@ -101,7 +105,7 @@ function findComm(tree){
     comm.setID(communities.length);
    
     let data = {
-      dataBaseCreation: "created"
+      "dataBaseCreation": "created"
     }
     let url = "https://winhacks2020-88149.firebaseio.com/community/" + communities.length + ".json";
     axios.put(url, data).then((response) => {
