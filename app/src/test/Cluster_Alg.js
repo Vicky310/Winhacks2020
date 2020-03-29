@@ -75,6 +75,9 @@ export default function setup() {
                   arrayPosts.push(somedata[post][postVals])
               }
           }
+          axios.delete(`${url}/${firebasePostId}.json`).then(response => {
+            console.log(response)
+          })
   
           findComm(qtree);
           communities.forEach(comm =>{
