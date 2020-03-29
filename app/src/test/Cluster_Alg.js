@@ -104,9 +104,15 @@ function findComm(tree){
   if(treeDensity >= density){
     var comm = new Community();
     comm.setID(communities.length);
-   
+    communities.push(comm);
+    partitionToComm(tree, comm);
+    comm.setLocationPoint(tree.boundary.x, tree.boundary.y);
+
     let data = {
-      "dataBaseCreation": "created"
+      "commLocation": {
+        "x": x,
+        "y": y
+      }
     }
     let url = "https://winhacks2020-88149.firebaseio.com/community/" + "testing" + communities.length + ".json";
     axios.patch(url, data).then((response) => {
@@ -117,9 +123,7 @@ function findComm(tree){
     });
 
 
-    communities.push(comm);
-    partitionToComm(tree, comm);
-    comm.setLocationPoint(tree.boundary.x, tree.boundary.y);
+
   }
   
   if(tree.divided){
