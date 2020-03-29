@@ -1,4 +1,4 @@
-import axios from 'axios';
+ import axios from 'axios';
 
 // center of screen lon and lat
 var clon = 0;
@@ -54,8 +54,8 @@ export default function setup() {
 
 
       dataList.forEach(arr => {
-        lat = arr[0];
-        lon = arr[1];
+        let lat = parseFloat(arr[0]);
+        let lon = parseFloat(arr[1]);
 
         let x = mercX(lon) - cx + 512;
         let y = mercY(lat) - cy + 256;
@@ -69,7 +69,7 @@ export default function setup() {
     findComm(qtree);
 
     users.forEach(usr =>{
-      data = {
+      let data = {
         community: usr.community.id
       }
       let url = "https://winhacks2020-88149.firebaseio.com/Users/" + usr.id + ".json"
@@ -102,16 +102,16 @@ function findComm(tree){
     var comm = new Community();
     comm.setID(communities.length);
    
-    data = {
+    let data = {
       dataBaseCreation: "created"
     }
-    let url = "https://winhacks2020-88149.firebaseio.com/community/" + communities.length + ".json"
+    let url = "https://winhacks2020-88149.firebaseio.com/community/" + communities.length + ".json";
     axios.put(url, data).then((response) => {
       console.log(response);
 
     }).catch(err => {
         console.log(err)
-    })
+    });
 
     communities.push(comm);
     partitionToComm(tree, comm);
@@ -150,13 +150,13 @@ function partitionToComm(tree, comm){
 
 // transform longitude to x coordinates
 function mercX(lon){
-  lon = Math.radians(lon);
+  lon = Math.PI*lon / 180;
   return (256 / Math.PI) * Math.pow(2, zoom) * (lon + Math.PI);
 }
 
 // transfrom latitude to y coordinates
 function mercY(lat){
-  lat = Math.radians(lat);
+  lat = Math.PI*lat / 180;
   let a = (256/Math.PI) * Math.pow(2, zoom);
   let b = Math.tan(Math.PI/4 + lat/2);
   let c = Math.PI - Math.log(b);
@@ -269,6 +269,5 @@ class Boundary{
             point.y <= this.y + this.h);
   }
 }
-
 
 

@@ -1,0 +1,25 @@
+[debug] [2020-03-29T05:16:14.791Z] ----------------------------------------------------------------------
+[debug] [2020-03-29T05:16:14.792Z] Command:       /Users/msharma/.nvm/versions/node/v13.9.0/bin/node /Users/msharma/.nvm/versions/node/v13.9.0/bin/firebase serve
+[debug] [2020-03-29T05:16:14.792Z] CLI Version:   7.16.1
+[debug] [2020-03-29T05:16:14.792Z] Platform:      darwin
+[debug] [2020-03-29T05:16:14.792Z] Node Version:  v13.9.0
+[debug] [2020-03-29T05:16:14.794Z] Time:          Sat Mar 28 2020 22:16:14 GMT-0700 (Pacific Daylight Time)
+[debug] [2020-03-29T05:16:14.794Z] ----------------------------------------------------------------------
+[debug] [2020-03-29T05:16:14.794Z] 
+[debug] [2020-03-29T05:16:14.802Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-03-29T05:16:14.802Z] > authorizing via signed-in user
+[debug] [2020-03-29T05:16:14.803Z] [iam] checking project winhacks2020-88149 for permissions ["firebase.projects.get"]
+[debug] [2020-03-29T05:16:14.805Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/winhacks2020-88149:testIamPermissions  
+
+[debug] [2020-03-29T05:16:15.010Z] <<< HTTP RESPONSE 200
+[debug] [2020-03-29T05:16:15.011Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/winhacks2020-88149  
+ 
+[debug] [2020-03-29T05:16:15.194Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/msharma/Desktop/Winhacks2020/app'...
+[info] 
+[debug] [2020-03-29T05:16:15.196Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/winhacks2020-88149/webApps/-/config  
+ 
+[debug] [2020-03-29T05:16:15.548Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: build
+[info] ✔  hosting: Local server: http://localhost:5000
