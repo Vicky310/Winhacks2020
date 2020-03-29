@@ -1,13 +1,13 @@
- import axios from 'axios';
+import axios from 'axios';
 
 // center of screen lon and lat
 var clon = 0;
 var clat = 0;
 
 // cluster min density
-var density = 1;
+var density = 0.001;
 // cluster min community size
-var minCommSize = 20;
+var minCommSize = 5;
 
 // quad tree
 var qtree;
@@ -64,7 +64,8 @@ export default function setup() {
 
       })
           // determine and create communities from clusters of users
-    findComm(qtree);
+
+      findComm(qtree);
 
     users.forEach(usr =>{
       console.log(usr.community.id)
@@ -107,13 +108,14 @@ function findComm(tree){
     let data = {
       "dataBaseCreation": "created"
     }
-    let url = "https://winhacks2020-88149.firebaseio.com/community/" + communities.length + ".json";
-    axios.put(url, data).then((response) => {
+    let url = "https://winhacks2020-88149.firebaseio.com/community/" + "testing" + communities.length + ".json";
+    axios.patch(url, data).then((response) => {
       console.log(response);
 
     }).catch(err => {
         console.log(err)
     });
+
 
     communities.push(comm);
     partitionToComm(tree, comm);
