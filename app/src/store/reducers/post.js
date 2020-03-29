@@ -2,7 +2,8 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     posts: [],
-    communities: []
+    communities: [],
+    communityLength: 0
 };
 
 const reducer = ( state = initialState, action ) => {
@@ -28,7 +29,14 @@ const reducer = ( state = initialState, action ) => {
             console.log('action', action.communities);
             return {
                 ...state,
-                communities: state.communities.concat(action.communities)
+                communities: action.communities,
+                communityLength: action.communities.length
+            }
+        case actionTypes.SAVE_POST_SUCCESS:
+            return {
+                ...state,
+                communities: state.communities.concat(action.data),
+                communityLength: state.communityLength+1
             }
         default:
             return state;

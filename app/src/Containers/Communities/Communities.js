@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Community from './Community/Community';
 import { Modal, Button, Input } from 'antd';
-import AddPost from '../../Components/AddPost/AddPost';
 import classes from './Communities.module.css';
+import * as actions from '../../store/actions/index';
 
 class Communities extends Component {
 
@@ -28,6 +28,12 @@ class Communities extends Component {
     };
 
     handlePost = () => {
+        let post = {
+            title: this.state.title,
+            content: this.state.content
+        }
+        this.props.onPost(post, new Date().getTime(), this.props.latitude, this.props.longitude,
+        this.props.userId, this.props.communityId, this.props.communityLength);
         this.setState({
             title: '',
             content: '',
@@ -42,11 +48,6 @@ class Communities extends Component {
 
     titleChangedHandler = (event) => {
         this.setState({ title: event.target.value, disabled: !(event.target.value && this.state.content) });
-    }
-
-    onPost = () => {
-        // this.props.postAdded(this.state.title, this.state.content);
-
     }
 
     render() {
@@ -102,10 +103,21 @@ class Communities extends Component {
 
 const mapStateToProps = state => {
     return {
-        communities: state.post.communities
+        communities: state.post.communities,
+        latitude: state.auth.latitude,
+        longitude: state.auth.longitude,
+        userId: state.auth.userId,
+        communityId: state.auth.communityId,
+        communityLength: state.post.communityLength
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onPost: (post, time, lat, long, uid, communityId, length) => dispatch(actions.savePost(post, time, lat, long, uid, communityId, length))
     };
 };
 
 
 
-export default connect(mapStateToProps)(Communities);
+export default connect(mapStateToProps, mapDispatchToProps)(Communities);

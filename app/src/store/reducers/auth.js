@@ -6,6 +6,11 @@ const initialState = {
     userId: null,
     error: null,
     loading: false,
+    firstName: null,
+    lastName: null,
+    latitude: null,
+    longitude: null,
+    communityId: null,
     authRedirectPath: '/'
 };
 
@@ -62,7 +67,8 @@ const userFetchSuccess = (state, action) => {
         lastName: action.user.last,
         userId: action.user.uid,
         latitude: action.user.latitude,
-        longitude: action.user.longitude
+        longitude: action.user.longitude,
+        communityId: action.user.community
     })
 }
 

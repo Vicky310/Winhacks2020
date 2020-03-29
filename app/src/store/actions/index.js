@@ -5,3 +5,7 @@ export {
     authCheckState,
     pushAuthData
 } from './authActions';
+
+export {
+    savePost
+} from './communityActions';
