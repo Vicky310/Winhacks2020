@@ -91,6 +91,10 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.USER_SAVE_FAILURE: return userSaveFail(state, action);
         case actionTypes.FETCH_USER_SUCCESS: return userFetchSuccess(state,action);
         case actionTypes.FETCH_USER_FAIL: return userFetchFail(state,action);
+        case actionTypes.UPDATE_COMMUNITY_ID: return {
+            ...state,
+            communityId: action.communityId
+        }
         default:
             return state;
     }

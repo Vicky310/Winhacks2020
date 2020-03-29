@@ -32,7 +32,7 @@ class Communities extends Component {
             title: this.state.title,
             content: this.state.content
         }
-        this.props.onPost(post, new Date().getTime(), this.props.latitude, this.props.longitude,
+        this.props.onPost(post, new Date().toLocaleTimeString(), this.props.latitude, this.props.longitude,
         this.props.userId, this.props.communityId, this.props.communityLength);
         this.setState({
             title: '',
