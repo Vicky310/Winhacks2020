@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import * as actionTypes from './actionTypes';
+import { fetchCommunity } from './communityActions';
 
 export const authStart = () => {
     return {
@@ -203,7 +204,8 @@ export const fetchUser = (token, userId) => {
                     id: key
                 });
             }
-            console.log(fetchedUsers, userId);
+            console.log(fetchedUsers[0].community);
+            dispatch(fetchCommunity(fetchedUsers[0].community));
             dispatch(fetchUserSuccess(fetchedUsers[0]));
         })
         .catch(err => {

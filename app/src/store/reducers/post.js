@@ -1,7 +1,8 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    posts: []
+    posts: [],
+    communities: []
 };
 
 const reducer = ( state = initialState, action ) => {
@@ -22,6 +23,12 @@ const reducer = ( state = initialState, action ) => {
             return {
                 ...state,
                 posts: state.posts.filter(post => post.id !== action.postId)
+            }
+        case actionTypes.FETCH_COMMUNITY_SUCCESS:
+            console.log('action', action.communities);
+            return {
+                ...state,
+                communities: state.communities.concat(action.communities)
             }
         default:
             return state;
