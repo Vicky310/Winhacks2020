@@ -5,7 +5,7 @@ var clon = 0;
 var clat = 0;
 
 // cluster min density
-var density = 0.005;
+var density = 0.001;
 // cluster min community size
 var minCommSize = 5;
 
@@ -71,17 +71,18 @@ export default function setup() {
     let url = "https://winhacks2020-88149.firebaseio.com/community.json";
       axios.get(url).then((response) => {
           let somedata = Object.values(response.data);
+          let somekey = Object.keys(response.data)
 
           var arrayPosts = [];
           for (let post in somedata){
               for(let postVals in somedata[post]){
                   arrayPosts.push(somedata[post][postVals])
               }
+            axios.delete("https://winhacks2020-88149.firebaseio.com/community/" + somekey[post] +  ".json").then(response => {
+             console.log("deleted a db ")
+            })
           }
-          axios.delete(`${url}/${firebasePostId}.json`).then(response => {
-            console.log(response)
-          })
-  
+          
           findComm(qtree);
           communities.forEach(comm =>{
 
