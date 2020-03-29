@@ -13,3 +13,7 @@
         width: 500px;
     }
 }
+
+.pageHeader {
+    border: 1px solid rgb(235, 237, 240);
+  }
