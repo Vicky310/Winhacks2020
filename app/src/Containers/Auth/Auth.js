@@ -145,7 +145,7 @@ class Auth extends Component {
             <div className={classes.Auth}>
                 <PageHeader
                     className="pageHeader"
-                    title="WinHacks2020"
+                    title="Lost In The Seperation"
                     subTitle="Sign up or Log in"
                 />
                 {authRedirect}

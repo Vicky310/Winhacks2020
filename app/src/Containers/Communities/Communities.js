@@ -58,6 +58,9 @@ class Communities extends Component {
                     <Button type="primary" onClick={this.showModal}>
                         Add a new post
                     </Button>
+                    <Button type="secondary" onClick={this.showModal}>
+                        Start Your Journey To A New Community
+                    </Button>
                     <Modal
                         title="Add Post"
                         visible={this.state.visible}
