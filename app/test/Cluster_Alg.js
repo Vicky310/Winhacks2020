@@ -25,9 +25,7 @@ var communities = [];
 
 var points = [];
 
-function preload(){
-  mapImg = loadImage("https://api.mapbox.com/styles/v1/mapbox/dark-v9/static/0,0," + zoom + ",0,0/1024x512?access_token=pk.eyJ1IjoidW5rbm93bjB4MDAiLCJhIjoiY2s4YWxhNGRtMGlhNjNlcGJtc2pwdmlyNyJ9.vcNCcMF3sIfv7lbKYCznrw", "unknown");
-  commIcon = loadImage("commIcon.png");
+function setup() {
 
   axios.get("https://winhacks2020-88149.firebaseio.com/Users.json")
   .then(res => {
@@ -44,16 +42,7 @@ function preload(){
       console.log(err);
   })
   
-}
-
-function setup() {
-  
-  createCanvas(1024, 512);
-  
-  translate(width/2, height/2);
-  imageMode(CENTER);
-  image(mapImg, 0, 0);
-  
+  // setup up default community for users who aren't in a community
   randomComm = new Community();
   randomComm.setID(0);
   
@@ -77,47 +66,10 @@ function setup() {
     qtree.insert(user);
 
   })
-
-  // for(let i = 1; i < dataList.length; i++){
-  //   let data = dataList[i].split(/,/);
-  //   let lat = data[1];
-  //   let lon = data[2];
-    
-  //   let x = mercX(lon) - cx + width/2;
-  //   let y = mercY(lat) - cy + height/2;
-  //   let point = new Point(x, y);
-  //   let user = new User(localStorage.getItem('userId'), point, randomComm);
-  //   users.push(user);
-  //   qtree.insert(user);
-  // }
   
-  translate(-width/2, -height/2);
-  
-  // draw all users onto map
-  noStroke();
-  fill(0, 0, 255, 200);
-  for(let i = 0; i < users.length; i++){
-    ellipse(users[i].point.x, users[i].point.y, 4, 4);
-  }
-  
-  // show the quad tree bars
-  //qtree.show();
   
   // determine and create communities from clusters of users
   findComm(qtree);
-  
-  // draw in the users with their repsective community color
-  noStroke();
-  for(let i = 0; i < users.length; i++){
-    //fill(users[i].community.color);
-    ellipse(users[i].point.x, users[i].point.y, 2, 2);
-  }
-  
-  // place down map push pin on communities
-  commIcon.resize(20, 15); // resize icon to appropriate size
-  for(let i = 0; i < communities.length; i++){
-    image(commIcon, communities[i].point.x, communities[i].point.y);
-  }
   
   users.forEach(usr =>{
     data = {
@@ -195,15 +147,125 @@ function partitionToComm(tree, comm){
 
 // transform longitude to x coordinates
 function mercX(lon){
-  lon = radians(lon);
-  return (256 / PI) * pow(2, zoom) * (lon + PI);
+  lon = Math.radians(lon);
+  return (256 / Math.PI) * Math.pow(2, zoom) * (lon + Math.PI);
 }
 
 // transfrom latitude to y coordinates
 function mercY(lat){
-  lat = radians(lat);
-  let a = (256/PI) * pow(2, zoom);
-  let b = tan(PI/4 + lat/2);
-  let c = PI - log(b);
+  lat = Math.radians(lat);
+  let a = (256/Math.PI) * Math.pow(2, zoom);
+  let b = Math.tan(Math.PI/4 + lat/2);
+  let c = Math.PI - Math.log(b);
   return a * c;
 }
+
+class User{
+  constructor(id, point, community){
+    this.id = id;
+    this.point = point;
+    this.community = community;
+  }
+}
+
+class QuadTree{
+  // defines the boundary of the quad tree and the cap of users allowed in this segment of the tree
+  constructor(boundary, cap){
+    this.boundary = boundary;
+    this.cap = cap;
+    this.users = [];
+    this.divided = false;
+    this.size = 0;
+  }
+  
+  
+  insert(user){
+    // if not within boundary, exit with false
+    if(!this.boundary.contains(user.point)){ return false; }
+    
+    this.size++; // increase size of users in tree and child trees
+    
+    
+    if(this.users.length < this.cap){ // if under cap then add to users
+      this.users.push(user);
+      return true;
+    }else{ // otherwise insert into children
+      if(!this.divided) { this.subdivide(); }
+      
+      if(this.northeast.insert(user) || this.northwest.insert(user) || 
+         this.southeast.insert(user) || this.southwest.insert(user)){
+         return true;
+      }
+      return false;
+    }
+  }
+  
+  // create children and start passing to children
+  subdivide(){
+    let x = this.boundary.x;
+    let y = this.boundary.y;
+    let w = this.boundary.w;
+    let h = this.boundary.h;
+    
+    let ne = new Boundary(x + w/2, y - h/2, w/2, h/2 );
+    this.northeast = new QuadTree(ne, this.cap);
+    let nw = new Boundary(x - w/2, y - h/2, w/2, h/2 );
+    this.northwest = new QuadTree(nw, this.cap);
+    let se = new Boundary(x + w/2, y + h/2, w/2, h/2 );
+    this.southeast = new QuadTree(se, this.cap);
+    let sw = new Boundary(x - w/2, y + h/2, w/2, h/2 );
+    this.southwest = new QuadTree(sw, this.cap);
+    
+    this.divided = true;
+  }
+  
+  // get the user to surface area density
+  getDensity(){
+    return this.size / (4 * this.boundary.w * this.boundary.h);
+  }
+ 
+
+
+}
+
+class Point{
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class Community{
+  contructor(){
+
+  }
+ 
+ setLocationPoint(x, y){
+   this.point = new Point(x, y);
+ }
+ setID(id){
+   this.id = id;
+ }
+}
+
+
+// defines a rectangular boundary
+class Boundary{
+  constructor(x, y, w, h){
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
+  
+  // return if a point is within boundary
+  contains(point){
+    return (point.x >= this.x - this.w &&
+            point.x <= this.x + this.w &&
+            point.y >= this.y - this.h &&
+            point.y <= this.y + this.h);
+  }
+}
+
+
+

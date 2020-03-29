@@ -49,21 +49,6 @@ class QuadTree{
     this.divided = true;
   }
   
-  show(){
-    stroke(255);
-    noFill();
-    rectMode(CENTER);
-    
-    rect(this.boundary.x, this.boundary.y, this.boundary.w*2, this.boundary.h*2);
-    
-    if(this.divided){
-      this.northeast.show();
-      this.northwest.show();
-      this.southeast.show();
-      this.southwest.show();
-    }
-  }
-  
   // get the user to surface area density
   getDensity(){
     return this.size / (4 * this.boundary.w * this.boundary.h);
