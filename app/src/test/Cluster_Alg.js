@@ -64,29 +64,69 @@ export default function setup() {
 
       })
           // determine and create communities from clusters of users
+      
+    let url = "https://winhacks2020-88149.firebaseio.com/community.json";
+      axios.get(url).then((response) => {
+          let somedata = Object.values(response.data);
 
-      findComm(qtree);
+          var arrayPosts = [];
+          for (let post in somedata){
+              for(let postVals in somedata[post]){
+                  arrayPosts.push(somedata[post][postVals])
+              }
+          }
+  
+          findComm(qtree);
+          communities.forEach(comm =>{
 
-    users.forEach(usr =>{
-      console.log(usr.community.id)
-      let data = {
-        "community": usr.community.id
-      }
-      console.log("data:  " + data.community)
+            let data = { 
+              "x": comm.point.x, 
+              "y": comm.point.y
+            }
 
-      let url = "https://winhacks2020-88149.firebaseio.com/Users/" + usr.id + ".json"
-      axios.patch(url, data).then((response) => {
-        console.log("The user was assigned a community");
+            for(let i in arrayPosts){
+
+              let lat = parseFloat(arrayPosts[i].latitude);
+              let lon = parseFloat(arrayPosts[i].longitude);
+              
+      
+              let x = mercX(lon) - cx + 512;
+              let y = mercY(lat) - cy + 256;
+
+              arrayPosts[i].latitude
+              data[i] = arrayPosts[i]
+            }
+
+            let url = "https://winhacks2020-88149.firebaseio.com/community/" + comm.id + ".json"
+            axios.put(url, data).then((response) => {
+
+
+            }).catch(err => {
+                console.log(err)
+            })
+          });
+
+          users.forEach(usr =>{
+              console.log(usr.community.id)
+              let data = {
+                "community": usr.community.id
+              }
+              console.log("data:  " + data.community)
+              let url = "https://winhacks2020-88149.firebaseio.com/Users/" + usr.id + ".json"
+              axios.patch(url, data).then((response) => {
+                console.log("The user was assigned a community");
+              }).catch(err => {
+                  console.log(err)
+              })
+          });
+
 
 
       }).catch(err => {
           console.log(err)
-      })
-    });
+      });
 
-
-  })
-  .catch(err => {
+  }).catch(err => {
       console.log(err);
   })
 
