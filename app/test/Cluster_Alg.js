@@ -27,6 +27,20 @@ var points = [];
 
 function setup() {
 
+ 
+  
+  // setup up default community for users who aren't in a community
+  randomComm = new Community();
+  randomComm.setID("default");
+  
+  let boundary = new Boundary(512, 256, 512, 256);
+  qtree = new QuadTree(boundary, minCommSize);
+  
+  // calc x and y respecitve to center lon/lat
+  var cx = mercX(clon);
+  var cy = mercY(clat);
+  
+  // parse the earthquake data and generate qtree and users array
   axios.get("https://winhacks2020-88149.firebaseio.com/Users.json")
   .then(res => {
       //console.log("users", Object.keys(res.data));  
@@ -37,57 +51,46 @@ function setup() {
         );
       }
       //console.log(dataList);
+
+
+      dataList.forEach(arr => {
+        lat = arr[0];
+        lon = arr[1];
+
+        let x = mercX(lon) - cx + 512;
+        let y = mercY(lat) - cy + 256;
+        let point = new Point(x, y);
+        let user = new User(arr[2], point, randomComm);
+        users.push(user);
+        qtree.insert(user);
+
+      })
+          // determine and create communities from clusters of users
+    findComm(qtree);
+
+    users.forEach(usr =>{
+      data = {
+        community: usr.community.id
+      }
+      let url = "https://winhacks2020-88149.firebaseio.com/Users/" + usr.id + ".json"
+      axios.patch(url, data).then((response) => {
+        console.log(response);
+
+      }).catch(err => {
+          console.log(err)
+      })
+    });
+
+
   })
   .catch(err => {
       console.log(err);
   })
-  
-  // setup up default community for users who aren't in a community
-  randomComm = new Community();
-  randomComm.setID(0);
-  
-  let boundary = new Boundary(width/2, height/2, width/2, height/2);
-  qtree = new QuadTree(boundary, minCommSize);
-  
-  // calc x and y respecitve to center lon/lat
-  var cx = mercX(clon);
-  var cy = mercY(clat);
-  
-  // parse the earthquake data and generate qtree and users array
-  dataList.forEach(arr => {
-    lat = arr[0];
-    lon = arr[1];
-
-    let x = mercX(lon) - cx + width/2;
-    let y = mercY(lat) - cy + height/2;
-    let point = new Point(x, y);
-    let user = new User(arr[2], point, randomComm);
-    users.push(user);
-    qtree.insert(user);
-
-  })
-  
-  
-  // determine and create communities from clusters of users
-  findComm(qtree);
-  
-  users.forEach(usr =>{
-    data = {
-      community: usr.community.id
-    }
-    let url = "https://winhacks2020-88149.firebaseio.com/Users/" + usr.id + ".json"
-    axios.patch(url, data).then((response) => {
-      console.log(response);
-
-    }).catch(err => {
-        console.log(err)
-    })
-  })
 
   
   
-
 }
+
 
 function findComm(tree){
   // check to see if tree meets minCommSize, if stop searching this branch
