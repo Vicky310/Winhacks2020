@@ -1,4 +1,6 @@
-class Rectangle{
+
+// defines a rectangular boundary
+class Boundary{
   constructor(x, y, w, h){
     this.x = x;
     this.y = y;
@@ -6,6 +8,7 @@ class Rectangle{
     this.h = h;
   }
   
+  // return if a point is within boundary
   contains(point){
     return (point.x >= this.x - this.w &&
             point.x <= this.x + this.w &&
