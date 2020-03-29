@@ -1,3 +1,4 @@
+import axios from 'axios';
 
 // center of screen lon and lat
 var clon = 0;
@@ -19,16 +20,30 @@ var zoom = 1;
 // 
 var commIcon;
 
-var dataList;
+var dataList = [];
 var communities = [];
-var users = [];
 
-var randomComm;
+var points = [];
 
 function preload(){
   mapImg = loadImage("https://api.mapbox.com/styles/v1/mapbox/dark-v9/static/0,0," + zoom + ",0,0/1024x512?access_token=pk.eyJ1IjoidW5rbm93bjB4MDAiLCJhIjoiY2s4YWxhNGRtMGlhNjNlcGJtc2pwdmlyNyJ9.vcNCcMF3sIfv7lbKYCznrw", "unknown");
   commIcon = loadImage("commIcon.png");
-  dataList = loadStrings("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.csv");
+
+  axios.get("https://winhacks2020-88149.firebaseio.com/Users.json")
+  .then(res => {
+      //console.log("users", Object.keys(res.data));  
+            
+      for (let key in res.data) {
+        dataList.push(
+            [res.data[key].latitude, res.data[key].longitude, key]
+        );
+      }
+      //console.log(dataList);
+  })
+  .catch(err => {
+      console.log(err);
+  })
+  
 }
 
 function setup() {
@@ -50,18 +65,31 @@ function setup() {
   var cy = mercY(clat);
   
   // parse the earthquake data and generate qtree and users array
-  for(let i = 1; i < dataList.length; i++){
-    let data = dataList[i].split(/,/);
-    let lat = data[1];
-    let lon = data[2];
-    
+  dataList.forEach(arr => {
+    lat = arr[0];
+    lon = arr[1];
+
     let x = mercX(lon) - cx + width/2;
     let y = mercY(lat) - cy + height/2;
     let point = new Point(x, y);
-    let user = new User(i, point, randomComm);
+    let user = new User(arr[2], point, randomComm);
     users.push(user);
     qtree.insert(user);
-  }
+
+  })
+
+  // for(let i = 1; i < dataList.length; i++){
+  //   let data = dataList[i].split(/,/);
+  //   let lat = data[1];
+  //   let lon = data[2];
+    
+  //   let x = mercX(lon) - cx + width/2;
+  //   let y = mercY(lat) - cy + height/2;
+  //   let point = new Point(x, y);
+  //   let user = new User(localStorage.getItem('userId'), point, randomComm);
+  //   users.push(user);
+  //   qtree.insert(user);
+  // }
   
   translate(-width/2, -height/2);
   
@@ -91,8 +119,18 @@ function setup() {
     image(commIcon, communities[i].point.x, communities[i].point.y);
   }
   
-  console.log(users);
-  
+  users.forEach(usr =>{
+    data = {
+      community: usr.community.id
+    }
+    let url = "https://winhacks2020-88149.firebaseio.com/Users/" + usr.id + ".json"
+    axios.patch(url, data).then((response) => {
+      console.log(response);
+
+    }).catch(err => {
+        console.log(err)
+    })
+  })
 
   
   
@@ -107,7 +145,19 @@ function findComm(tree){
   
   if(treeDensity >= density){
     var comm = new Community();
-    comm.setID(1);
+    comm.setID(communities.length);
+   
+    data = {
+      dataBaseCreation: "created"
+    }
+    let url = "https://winhacks2020-88149.firebaseio.com/community/" + communities.length + ".json"
+    axios.put(url, data).then((response) => {
+      console.log(response);
+
+    }).catch(err => {
+        console.log(err)
+    })
+
     communities.push(comm);
     partitionToComm(tree, comm);
     comm.setLocationPoint(tree.boundary.x, tree.boundary.y);
