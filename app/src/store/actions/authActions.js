@@ -104,7 +104,8 @@ export const auth = (firstName, lastName, email, password, isSignup) => {
                 localStorage.setItem('expirationDate', expirationDate);
                 localStorage.setItem('userId', response.data.localId);
                 if(isSignup) {
-                    dispatch(pushAuthData(response.data.localId, firstName, lastName, email, localStorage.getItem('latitude'), localStorage.getItem('longitude')));
+                    dispatch(pushAuthData(response.data.localId, firstName, lastName, email, localStorage.getItem('latitude'),
+                    localStorage.getItem('longitude')));
                     
                 }
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
@@ -170,7 +171,7 @@ export const pushAuthData = (userId, first, last, email, lat, long) => {
           axios.put(url, data).then((response) => {
             console.log(response);
             setup();
-      
+            dispatch(updateCommunityId('default'));
             dispatch(userSave(first, last, email, userId, lat, long));
           }).catch(err => {
               dispatch(userSaveFailure(err.response.data.error));
@@ -192,6 +193,13 @@ export const fetchUserFail = (error) => {
         error: error
     }
 };
+
+export const updateCommunityId = (communityId) => {
+    return {
+        type: actionTypes.UPDATE_COMMUNITY_ID,
+        communityId: communityId
+    }
+}
 
 export const fetchUser = (token, userId) => {
     return dispatch => { 

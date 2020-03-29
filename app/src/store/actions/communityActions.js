@@ -38,7 +38,7 @@ export const savePostFail = (error) => {
     }
 }
 
-export const savePost = (post, time, lat, long, uid, communityId, length) => {
+export const savePost = (post, time, lat, long, uid, communityId, len) => {
     console.log(lat, long);
     return dispatch => {
         let data = {
@@ -49,7 +49,7 @@ export const savePost = (post, time, lat, long, uid, communityId, length) => {
                 "uid": uid
           }
     
-          let url = "https://winhacks2020-88149.firebaseio.com/community/" + communityId + "/" + (++length) +".json"
+          let url = "https://winhacks2020-88149.firebaseio.com/community/" + communityId + "/" + len +".json"
           axios.put(url, data).then((response) => {
             console.log(response);
             dispatch(savePostSuccess(response.data));
