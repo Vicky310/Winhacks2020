@@ -5,7 +5,7 @@ var clon = 0;
 var clat = 0;
 
 // cluster min density
-var density = 0.001;
+var density = 0.005;
 // cluster min community size
 var minCommSize = 5;
 
@@ -97,17 +97,15 @@ export default function setup() {
               let y = mercY(lat) - cy + 256;
 
               // if post was made within 20 units from community
-              if(Math.pow((x - comm.point.x), 2) + Math.pow((y - comm.point.y), 2) <= 20){
-                
+              if(Math.pow((x - comm.point.x), 2) + Math.pow((y - comm.point.y), 2) <= (400)){
+                data[i] = arrayPosts[i]
               }
 
-              arrayPosts[i].latitude
-              data[i] = arrayPosts[i]
             }
 
             let url = "https://winhacks2020-88149.firebaseio.com/community/" + comm.id + ".json"
             axios.put(url, data).then((response) => {
-
+              console.log(response)
 
             }).catch(err => {
                 console.log(err)
@@ -155,22 +153,6 @@ function findComm(tree){
     communities.push(comm);
     partitionToComm(tree, comm);
     comm.setLocationPoint(tree.boundary.x, tree.boundary.y);
-
-    let data = {
-      "commLocation": {
-        "x": x,
-        "y": y
-      }
-    }
-    let url = "https://winhacks2020-88149.firebaseio.com/community/" + "testing" + communities.length + ".json";
-    axios.patch(url, data).then((response) => {
-      console.log(response);
-
-    }).catch(err => {
-        console.log(err)
-    });
-
-
 
   }
   
