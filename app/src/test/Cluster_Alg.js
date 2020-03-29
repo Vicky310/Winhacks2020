@@ -12,18 +12,16 @@ var minCommSize = 20;
 // quad tree
 var qtree;
 
-// image of map
-var mapImg;
 // zoom level of map
 var zoom = 1;
 
-// 
-var commIcon;
 
 var dataList = [];
 var communities = [];
 
-var points = [];
+var users = [];
+
+var randomComm;
 
 export default function setup() {
 
