@@ -25,7 +25,7 @@ var communities = [];
 
 var points = [];
 
-function setup() {
+export default function setup() {
 
  
   

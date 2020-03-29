@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import setup from '../../test/Cluster_Alg';
 import * as actionTypes from './actionTypes';
 import { fetchCommunity } from './communityActions';
 
@@ -105,6 +105,7 @@ export const auth = (firstName, lastName, email, password, isSignup) => {
                 localStorage.setItem('userId', response.data.localId);
                 if(isSignup) {
                     dispatch(pushAuthData(response.data.localId, firstName, lastName, email, localStorage.getItem('latitude'), localStorage.getItem('longitude')));
+                    setup();
                 }
                 dispatch(authSuccess(response.data.idToken, response.data.localId));
                 dispatch(checkAuthTimeout(response.data.expiresIn));
